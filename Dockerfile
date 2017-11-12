@@ -1,6 +1,9 @@
 FROM ubuntu
 
-LABEL modified="Argel Bejarano" github="Arkangel12" baseBuild="sergeymakinen/oracle-instant-client"
+LABEL modifiedBy="Argel Bejarano" github="Arkangel12" \
+      createdBy="sergeymakinen/oracle-instant-client"
+
+ARG username
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -20,18 +23,17 @@ RUN apt-get update && apt-get install -y libaio1 curl rpm2cpio cpio \
     && curl -L https://github.com/sergeymakinen/docker-oracle-instant-client/raw/assets/oracle-instantclient$ORACLE_INSTANTCLIENT_MAJOR-devel-$ORACLE_INSTANTCLIENT_VERSION-1.x86_64.rpm -o devel.rpm \
     && curl -O https://storage.googleapis.com/golang/go1.9.2.linux-amd64.tar.gz \
     && tar -xvf go1.9.2.linux-amd64.tar.gz && mv go /usr/local \
-    && mkdir $HOME/work && cd $HOME && mkdir -p work/src/github.com/Arkangel12 \
     && rpm2cpio devel.rpm | cpio -i -d -v && cp -r usr/* $ORACLE && rm -rf "$TMP_DIR" \
     && echo "$ORACLE_HOME/lib" > /etc/ld.so.conf.d/oracle.conf \
-    && chmod o+r /etc/ld.so.conf.d/oracle.conf \
-    && ldconfig \
+    && chmod o+r /etc/ld.so.conf.d/oracle.conf && ldconfig \
+    && mkdir $HOME/work && cd $HOME && mkdir -p work/src/github.com/$username \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get purge -y --auto-remove curl rpm2cpio cpio
 
 ENV PATH "$PATH:/usr/local/go/bin"    
 ENV GOPATH "$HOME/work"
 
-WORKDIR $HOME/work/src/github.com/Arkangel12
+WORKDIR $HOME/work/src/github.com/$username
 
-#docker build -t goora:latest .
-#docker run -it -p 8080:8080 -v "$(pwd)":/work/src/github.com/Arkangel12 --name <name of conainer>  goora
+#docker build -t goora:latest --build-arg username=youruser .
+#docker run -it -p 8080:8080 -v "$(pwd)":/work/src/github.com/youruser --name <name of container> goora
