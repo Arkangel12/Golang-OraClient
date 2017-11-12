@@ -2,7 +2,7 @@
 
 With this dockerfile you'll be able to: < br>
 
-<li>
-	<ul> Connect to Oracle DB with Instant Cliente </ul>
-	<ul> Developing in a full GoLang Enviroment </ul>
-</li>
+<ul>
+	<li> Connect to Oracle DB with Instant Cliente </li>
+	<li> Developing in a flil GoLang Enviroment </ul>
+</ul>
